@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Data Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fake Data Generator</h1>
+            <p>Generate realistic fake data for testing and development</p>
+            <nav>
+                <a href="/swagger">API Documentation</a>
+            </nav>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('simple')">Simple Generator</button>
+            <button class="tab-btn" onclick="openTab('template')">Template Generator</button>
+        </div>
+
+        <div id="simple" class="tab-content active">
+            <h2>Simple Generator</h2>
+            <div class="form-group">
+                <label for="data-type">Data Type:</label>
+                <select id="data-type">
+                    <option value="name">Name</option>
+                    <option value="email">Email</option>
+                    <option value="address">Address</option>
+                    <option value="phone">Phone Number</option>
+                    <option value="company">Company</option>
+                    <option value="text">Text</option>
+                    <option value="date">Date</option>
+                    <option value="credit_card">Credit Card</option>
+                    <option value="job">Job</option>
+                    <option value="color">Color</option>
+                    <option value="url">URL</option>
+                    <option value="ipv4">IPv4</option>
+                    <option value="ipv6">IPv6</option>
+                    <option value="user_agent">User Agent</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="data-count">Count:</label>
+                <input type="number" id="data-count" min="1" max="100" value="5">
+            </div>
+            <button onclick="generateSimpleData()">Generate</button>
+            <div class="result-container">
+                <div class="result-header">
+                    <h3>Result:</h3>
+                    <button onclick="copyToClipboard('simple-result')" class="copy-btn">Copy</button>
+                </div>
+                <pre id="simple-result" class="result">Results will appear here...</pre>
+            </div>
+        </div>
+
+        <div id="template" class="tab-content">
+            <h2>Template Generator</h2>
+            <div class="form-group">
+                <label for="template-schema">Template Schema (JSON):</label>
+                <textarea id="template-schema" rows="10" placeholder='{"userId": "uuid4", "email": "email", "isActive": "boolean", "registeredAt": "date_time"}'></textarea>
+            </div>
+            <div class="form-group">
+                <label for="template-count">Count:</label>
+                <input type="number" id="template-count" min="1" max="100" value="3">
+            </div>
+            <button onclick="generateTemplateData()">Generate</button>
+            <div class="result-container">
+                <div class="result-header">
+                    <h3>Result:</h3>
+                    <button onclick="copyToClipboard('template-result')" class="copy-btn">Copy</button>
+                </div>
+                <pre id="template-result" class="result">Results will appear here...</pre>
+            </div>
+        </div>
+
+        <div class="supported-types">
+            <h3>Supported Data Types:</h3>
+            <ul>
+                <li><code>name</code> - Full name</li>
+                <li><code>email</code> - Email address</li>
+                <li><code>address</code> - Physical address</li>
+                <li><code>phone</code> - Phone number</li>
+                <li><code>company</code> - Company name</li>
+                <li><code>text</code> - Random paragraph</li>
+                <li><code>date</code> - Date (YYYY-MM-DD)</li>
+                <li><code>date_time</code> - DateTime (YYYY-MM-DDTHH:MM:SS)</li>
+                <li><code>credit_card</code> - Credit card number</li>
+                <li><code>job</code> - Job title</li>
+                <li><code>color</code> - Color name</li>
+                <li><code>url</code> - URL</li>
+                <li><code>ipv4</code> - IPv4 address</li>
+                <li><code>ipv6</code> - IPv6 address</li>
+                <li><code>user_agent</code> - Browser user agent</li>
+                <li><code>uuid4</code> - UUID v4</li>
+                <li><code>boolean</code> - True or False</li>
+                <li><code>integer</code> - Random integer (1-1000)</li>
+                <li><code>float</code> - Random float (1.0-1000.0)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            const tabButtons = document.getElementsByClassName('tab-btn');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function generateSimpleData() {
+            const dataType = document.getElementById('data-type').value;
+            const count = document.getElementById('data-count').value;
+            const resultElement = document.getElementById('simple-result');
+            
+            resultElement.textContent = 'Loading...';
+            
+            fetch(`/generate?type=${dataType}&count=${count}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultElement.textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    resultElement.textContent = `Error: ${error.message}`;
+                });
+        }
+
+        function generateTemplateData() {
+            const templateSchema = document.getElementById('template-schema').value;
+            const count = document.getElementById('template-count').value;
+            const resultElement = document.getElementById('template-result');
+            
+            resultElement.textContent = 'Loading...';
+            
+            try {
+                const templateObject = JSON.parse(templateSchema);
+                
+                fetch('/template', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        template: templateObject,
+                        count: parseInt(count)
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    resultElement.textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    resultElement.textContent = `Error: ${error.message}`;
+                });
+            } catch (error) {
+                resultElement.textContent = `Invalid JSON: ${error.message}`;
+            }
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    const copyBtn = document.querySelector(`#${elementId}`).previousElementSibling.querySelector('.copy-btn');
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyBtn.textContent = 'Copy';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+        }
+    </script>
+</body>
+</html>
