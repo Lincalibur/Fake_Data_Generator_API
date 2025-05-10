@@ -49,7 +49,7 @@ The API supports generating the following types of fake data:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/Fake_Data_Generator_API.git
+git clone https://github.com/lincalibur/Fake_Data_Generator_API.git
 cd Fake_Data_Generator_API
 ```
 
@@ -65,7 +65,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The API will be available at http://127.0.0.1:5000
+The API will be available at http://127.0.0.1:5000/ui
 
 ### Docker Setup
 
