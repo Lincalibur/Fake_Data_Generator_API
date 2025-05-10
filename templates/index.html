@@ -5,11 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fake Data Generator API</title>
     <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --header-color: #2c3e50;
+            --primary-color: #3498db;
+            --primary-hover: #2980b9;
+            --success-color: #2ecc71;
+            --success-hover: #27ae60;
+        }
+        
+        .dark-mode {
+            --bg-color: #1a1a1a;
+            --text-color: #f0f0f0;
+            --header-color: #e0e0e0;
+            --primary-color: #2980b9;
+            --primary-hover: #3498db;
+            --success-color: #27ae60;
+            --success-hover: #2ecc71;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
+            color: var(--text-color);
+            background-color: var(--bg-color);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -18,10 +38,11 @@
             margin: 0;
             padding: 20px;
             text-align: center;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         h1 {
-            color: #2c3e50;
+            color: var(--header-color);
             margin-bottom: 20px;
         }
         
@@ -38,7 +59,7 @@
         a {
             display: inline-block;
             padding: 12px 24px;
-            background-color: #3498db;
+            background-color: var(--primary-color);
             color: white;
             text-decoration: none;
             border-radius: 4px;
@@ -47,25 +68,61 @@
         }
         
         a:hover {
-            background-color: #2980b9;
+            background-color: var(--primary-hover);
         }
         
         a.ui {
-            background-color: #2ecc71;
+            background-color: var(--success-color);
         }
         
         a.ui:hover {
-            background-color: #27ae60;
+            background-color: var(--success-hover);
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: var(--text-color);
+            transition: transform 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(30deg);
         }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" id="themeToggle">🌓</button>
     <h1>Fake Data Generator API</h1>
     <p>Generate realistic fake data for testing and development purposes. Use our API endpoints or the web UI to create custom test data.</p>
-    
     <div class="buttons">
-        <a href="/swagger" class="docs">API Documentation</a>
+        <a href="/swagger" class="swagger">API Documentation</a>
         <a href="/ui" class="ui">Web UI</a>
     </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Check for saved theme preference or respect OS preference
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const savedTheme = localStorage.getItem('theme');
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+            document.body.classList.add('dark-mode');
+        }
+        
+        // Toggle theme when button is clicked
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+        });
+    </script>
 </body>
 </html>

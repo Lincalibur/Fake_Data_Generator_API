@@ -4,11 +4,44 @@
     padding: 0;
 }
 
+:root {
+    --bg-color: #f8f9fa;
+    --text-color: #333;
+    --header-color: #2c3e50;
+    --subtext-color: #7f8c8d;
+    --card-bg: white;
+    --border-color: #ddd;
+    --tab-inactive: #ecf0f1;
+    --primary-color: #3498db;
+    --primary-hover: #2980b9;
+    --success-color: #2ecc71;
+    --success-hover: #27ae60;
+    --code-bg: #f8f9fa;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode {
+    --bg-color: #1a1a1a;
+    --text-color: #f0f0f0;
+    --header-color: #e0e0e0;
+    --subtext-color: #b0b0b0;
+    --card-bg: #2d2d2d;
+    --border-color: #444;
+    --tab-inactive: #3d3d3d;
+    --primary-color: #2980b9;
+    --primary-hover: #3498db;
+    --success-color: #27ae60;
+    --success-hover: #2ecc71;
+    --code-bg: #383838;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
@@ -21,16 +54,33 @@ header {
     text-align: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
 }
 
 header h1 {
-    color: #2c3e50;
+    color: var(--header-color);
     margin-bottom: 10px;
 }
 
 header p {
-    color: #7f8c8d;
+    color: var(--subtext-color);
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: var(--text-color);
+    transition: transform 0.3s;
+}
+
+.theme-toggle:hover {
+    transform: rotate(30deg);
 }
 
 nav {
@@ -40,7 +90,7 @@ nav {
 nav a {
     display: inline-block;
     padding: 8px 16px;
-    background-color: #3498db;
+    background-color: var(--primary-color);
     color: white;
     text-decoration: none;
     border-radius: 4px;
@@ -48,7 +98,7 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #2980b9;
+    background-color: var(--primary-hover);
 }
 
 .tabs {
@@ -59,11 +109,12 @@ nav a:hover {
 .tab-btn {
     flex: 1;
     padding: 10px;
-    background-color: #ecf0f1;
+    background-color: var(--tab-inactive);
     border: none;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+    color: var(--text-color);
 }
 
 .tab-btn:first-child {
@@ -75,16 +126,16 @@ nav a:hover {
 }
 
 .tab-btn.active {
-    background-color: #3498db;
+    background-color: var(--primary-color);
     color: white;
 }
 
 .tab-content {
     display: none;
-    background-color: white;
+    background-color: var(--card-bg);
     padding: 20px;
     border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px var(--shadow-color);
     margin-bottom: 20px;
 }
 
@@ -105,9 +156,11 @@ label {
 select, input, textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     font-size: 16px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
 
 textarea {
@@ -116,7 +169,7 @@ textarea {
 
 button {
     padding: 10px 20px;
-    background-color: #2ecc71;
+    background-color: var(--success-color);
     color: white;
     border: none;
     border-radius: 4px;
@@ -126,14 +179,15 @@ button {
 }
 
 button:hover {
-    background-color: #27ae60;
+    background-color: var(--success-hover);
 }
 
 .result-container {
     margin-top: 20px;
-    background-color: #f8f9fa;
+    background-color: var(--bg-color);
     border-radius: 4px;
     overflow: hidden;
+    border: 1px solid var(--border-color);
 }
 
 .result-header {
@@ -141,17 +195,17 @@ button:hover {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #ecf0f1;
+    background-color: var(--tab-inactive);
 }
 
 .copy-btn {
     padding: 5px 10px;
     font-size: 14px;
-    background-color: #3498db;
+    background-color: var(--primary-color);
 }
 
 .copy-btn:hover {
-    background-color: #2980b9;
+    background-color: var(--primary-hover);
 }
 
 .result {
@@ -161,18 +215,20 @@ button:hover {
     white-space: pre-wrap;
     font-family: monospace;
     font-size: 14px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
 
 .supported-types {
-    background-color: white;
+    background-color: var(--card-bg);
     padding: 20px;
     border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 .supported-types h3 {
     margin-bottom: 15px;
-    color: #2c3e50;
+    color: var(--header-color);
 }
 
 .supported-types ul {
@@ -183,7 +239,7 @@ button:hover {
 }
 
 .supported-types code {
-    background-color: #f8f9fa;
+    background-color: var(--code-bg);
     padding: 2px 5px;
     border-radius: 3px;
     font-family: monospace;
